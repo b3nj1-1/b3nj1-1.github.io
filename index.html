@@ -12,15 +12,19 @@
     <meta name="theme-color" content="#ffffff">
 </head>
 <style type="text/css">
-	.text {
+body{
+  background-color: #171421;
+  color:#FFFFFF;
+  zoom: 150%;
+}
+.text {
   font-size:15px;
   font-family:helvetica;
   font-weight:bold;
   color:#5EBDAB;
   text-transform:uppercase;
 }
-.par {
- 
+.par { 
   animation-name: parpadeo;
   animation-duration: 1s;
   animation-timing-function: linear;
@@ -31,7 +35,7 @@
   -webkit-animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
 }
- 
+
 @-moz-keyframes parpadeo{  
   0% { opacity: 1.0; }
   50% { opacity: 0.0; }
@@ -41,34 +45,118 @@
 @-webkit-keyframes parpadeo {  
   0% { opacity: 1.0; }
   50% { opacity: 0.0; }
-   100% { opacity: 1.0; }
+  100% { opacity: 1.0; }
 }
  
 @keyframes parpadeo {  
   0% { opacity: 1.0; }
-   50% { opacity: 0.0; }
+  50% { opacity: 0.0; }
   100% { opacity: 1.0; }
 }
-</style>   
-<body bgcolor="#171421" style="color:#FFFFFF">
+input[type="text"]{
+  background: transparent;
+  border: none;
+  font-size:12px;
+  font-family:helvetica;
+  font-weight:bold;
+  color:#5EBDAB;
+  outline: none;
+}
+/* COLORS */
+.d{
+  color: #367BF0;
+}
+.r{
+  color: #5EBDAB;
+}
+.w{
+  color: #FF8A18;
+}
+.x{
+  color: #D41919;
+}
+.line{
+  color: #808080;
+}
+.info{
+  color: #198388;
+}
+.user{
+  color: #D0CFCC;
+}
+.dir{
+  color: #5292FF;
+  font-weight: bold;
+}
+
+.header1{
+  color: #5EBDAB;
+}
+.header2{
+  color: #367BF0;
+}
+.oculto{
+  visibility: hidden;
+  color: #D0CFCC;
+}
+@media (max-width: 1100px) {
+ html,body{
+  zoom: 90%;
+  }
+  input[type="text"]{
+  background: transparent;
+  border: none;
+  font-size: 30px;
+  font-family:helvetica;
+  font-weight:bold;
+  color:#5EBDAB;
+  outline: none;
+}
+}
+</style>
+<script>
+function pulsar() {
+  var x = document.getElementById("barra");
+  if (x.style.display === "block") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+</script>
+<body>
 <code>
-<h3 style="color:#5EBDAB">┌──(<font color="#367BF0">b3nj1㉿www</font>)-[~]
+<!-- DIRECTORIOS -->
+<h3 class="header1">┌──(<font class="header2">b3nj1㉿www</font>)-[~]
 </br>
 └─$ ls <font color="#962AC3">-l</font></h3>
 total 0<br>
-<font color="#367BF0">d</font><font color="#5EBDAB">r</font><font color="#FF8A18">w</font><font color="#D41919">x</font><font color="#5EBDAB">r</font><font color="	#808080">-</font><font color="#D41919">x</font><font color="#5EBDAB">r</font><font color="#808080">-</font><font color="#D41919">x</font> <font color="#198388">1</font> <font color="#D0CFCC">b3nj1</font> <font color="#D0CFCC">b3nj1</font> &nbsp;<font color="#198388">2048 Jul 21 &nbsp;2021</font> <a href="https://b3nj1-1.github.io/blog/">Blog/</a><br>
+<font class="d">d</font><font class="r">r</font><font class="w">w</font><font class="x">x</font><font class="r"></font>r</font><font class="line">-</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font> <font class="info">1</font> <font class="user">b3nj1</font> <font class="user">b3nj1</font> &nbsp;<font class="info">2048 Jul 21 &nbsp;2021</font> <a class="dir" href="https://b3nj1-1.github.io/blog/">Blog/</a><br>
  
-<font color="#367BF0">d</font><font color="#5EBDAB">r</font><font color="#FF8A18">w</font><font color="#D41919">x</font><font color="#5EBDAB">r</font><font color="	#808080">-</font><font color="#D41919">x</font><font color="#5EBDAB">r</font><font color="#808080">-</font><font color="#D41919">x</font> <font color="#198388">1</font> <font color="#D0CFCC">b3nj1</font> <font color="#D0CFCC">b3nj1</font> &nbsp;<font color="#198388">2048 Dec 29 &nbsp;2020</font> <a href="https://github.com/b3nj1-1">Github/</a><br>
+<font class="d">d</font><font class="r">r</font><font class="w">w</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font> <font class="info">1</font> <font class="user">b3nj1</font> <font class="user">b3nj1</font> &nbsp;<font class="info">2048 Dec 29 &nbsp;2020</font> <a class="dir" href="https://github.com/b3nj1-1">Github/</a><br>
  
-<font color="#367BF0">d</font><font color="#5EBDAB">r</font><font color="#FF8A18">w</font><font color="#D41919">x</font><font color="#5EBDAB">r</font><font color="	#808080">-</font><font color="#D41919">x</font><font color="#5EBDAB">r</font><font color="#808080">-</font><font color="#D41919">x</font> <font color="#198388">1</font> <font color="#D0CFCC">b3nj1</font> <font color="#D0CFCC">b3nj1</font> &nbsp;<font color="#198388">2048 Sept 1 &nbsp;2021</font> <a href="https://www.linkedin.com/in/elian-castro-b6022321b/">Linkedin/</a><br>
+<font class="d">d</font><font class="r">r</font><font class="w">w</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font> <font class="info">1</font> <font class="user">b3nj1</font> <font class="user">b3nj1</font> &nbsp;<font class="info">2048 Sept 1 &nbsp;2021</font> <a class="dir" href="https://www.linkedin.com/in/elian-castro-b6022321b/">Linkedin/</a><br>
  
-<font color="#367BF0">d</font><font color="#5EBDAB">r</font><font color="#FF8A18">w</font><font color="#D41919">x</font><font color="#5EBDAB">r</font><font color="	#808080">-</font><font color="#D41919">x</font><font color="#5EBDAB">r</font><font color="#808080">-</font><font color="#D41919">x</font> <font color="#198388">1</font> <font color="#D0CFCC">b3nj1</font> <font color="#D0CFCC">b3nj1</font> &nbsp;<font color="#198388">2048 Apr 1 &nbsp;2020</font> <a href="https://twitter.com/BrutteSei">Twitter/</a><br>
+<font class="d">d</font><font class="r">r</font><font class="w">w</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font> <font class="info">1</font> <font class="user">b3nj1</font> <font class="user">b3nj1</font> &nbsp;<font class="info">2048 Apr 1 &nbsp;2020</font> <a class="dir" href="https://twitter.com/b3nj1_1">Twitter/</a><br>
  
-<font color="#367BF0">d</font><font color="#5EBDAB">r</font><font color="#FF8A18">w</font><font color="#D41919">x</font><font color="#5EBDAB">r</font><font color="	#808080">-</font><font color="#D41919">x</font><font color="#5EBDAB">r</font><font color="#808080">-</font><font color="#D41919">x</font> <font color="#198388">1</font> <font color="#D0CFCC">b3nj1</font> <font color="#D0CFCC">b3nj1</font> &nbsp;<font color="#198388">2048 Jan 1 &nbsp;2020</font> <a href="https://app.hackthebox.eu/profile/257310">HacktheBox/</a><br>
+<font class="d">d</font><font class="r">r</font><font class="w">w</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font> <font class="info">1</font> <font class="user">b3nj1</font> <font class="user">b3nj1</font> &nbsp;<font class="info">2048 Jan 1 &nbsp;2020</font> <a class="dir" href="https://app.hackthebox.eu/profile/257310">HacktheBox/</a><br>
  
-<h3 style="color:#5EBDAB">┌──(<font color="#367BF0">b3nj1㉿www</font>)-[~]
-</br>
-└─$ <span class="par text"><strong>|</strong></h3>
+<!-- INPUT -->
+<h3 class="header1">┌──(<font class="header2">b3nj1㉿www</font>)-[~]</br>
+└─$<span class="par text"><strong id="barra">|</span><input type="text" id="shell" onclick="pulsar()" spellcheck="false"/></strong></h3>
+
+<!-- RESPUESTA -->
+<div id="response" class="oculto">
+<h4>This is my blog oriented on cybersecurity</h4>
 </code>
+<script>
+  document.getElementById("shell").onkeypress = function(e){
+    if (!e) e = window.event;
+    if (e.keyCode === 13) {
+  document.getElementById("response").style.visibility = "visible";
+      return false;
+  }};
+</script>
 </body>
 </html>
