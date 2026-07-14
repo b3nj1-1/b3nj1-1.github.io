@@ -1,172 +1,488 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5EB08G35TQ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>b3nj1 — terminal</title>
+  <meta name="theme-color" content="#171421">
+  <meta name="description" content="Elian Castro — cybersecurity & software engineering">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="icon" type="image/png" sizes="32x32" href="favi/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favi/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favi/apple-icon-180x180.png">
+  <link rel="manifest" href="favi/manifest.json">
 
-      gtag('config', 'G-5EB08G35TQ');
-    </script>
-    <title>b3nj1</title>
-    <link rel="apple-touch-icon" sizes="57x57" href="favi/apple-icon-57x57.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="favi/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favi/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="favi/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favi/favicon-16x16.png">
-    <link rel="manifest" href="favi/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="favi/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5EB08G35TQ"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-5EB08G35TQ');</script>
+
+  <!-- Font for terminal feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #171421;
+      --fg: #d0cfcc;
+      --green: #5ebdab;
+      --blue: #367bf0;
+      --orange: #ff8a18;
+      --red: #d41919;
+      --purple: #962ac3;
+      --cyan: #198388;
+      --gray: #808080;
+      --bright-fg: #ffffff;
+      --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      --font-size: 14px;
+      --line-height: 1.6;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gray) transparent;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-mono);
+      font-size: clamp(13px, var(--font-size), 16px);
+      line-height: var(--line-height);
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .terminal {
+      width: 100%;
+      max-width: 860px;
+      background: var(--bg);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      padding: clamp(1rem, 2vw, 2rem) clamp(1rem, 3vw, 2rem);
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+      position: relative;
+    }
+
+    /* subtle scanline overlay */
+    .terminal::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.015) 2px, rgba(255,255,255,.015) 4px);
+      pointer-events: none;
+      border-radius: 12px;
+    }
+
+    #output {
+      min-height: 14em;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    #output a {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    #output a:hover,
+    #output a:focus-visible {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    #output a::after {
+      content: '/';
+      color: var(--blue);
+    }
+
+    .prompt-line {
+      display: flex;
+      align-items: center;
+      gap: .35em;
+      flex-wrap: wrap;
+      margin-top: .25em;
+    }
+
+    .prompt-prefix {
+      color: var(--green);
+      font-weight: 700;
+      user-select: none;
+    }
+
+    #input {
+      flex: 1;
+      min-width: 120px;
+      background: transparent;
+      border: none;
+      color: var(--fg);
+      font: inherit;
+      font-size: inherit;
+      outline: none;
+      caret-color: var(--green);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: .55em;
+      height: 1.1em;
+      background: var(--green);
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+      flex-shrink: 0;
+    }
+
+    .cursor.static {
+      animation: none;
+      background: transparent;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* utility colors for ls */
+    .c-d { color: var(--blue); }
+    .c-r { color: var(--green); }
+    .c-w { color: var(--orange); }
+    .c-x { color: var(--red); }
+    .c-line { color: var(--gray); }
+    .c-info { color: var(--cyan); }
+    .c-user { color: var(--fg); }
+    .c-dir { color: var(--blue); font-weight: 700; }
+    .c-header1 { color: var(--green); }
+    .c-header2 { color: var(--blue); }
+
+    .color-green { color: var(--green); }
+    .color-blue { color: var(--blue); }
+    .color-orange { color: var(--orange); }
+    .color-red { color: var(--red); }
+    .color-cyan { color: var(--cyan); }
+    .color-purple { color: var(--purple); }
+    .color-gray { color: var(--gray); }
+
+    .dim { opacity: .65; }
+
+    .oculto {
+      visibility: hidden;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: .5rem; align-items: flex-start; padding-top: 2vh; }
+      .terminal {
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.5);
+      }
+      #output { min-height: 8em; }
+      .cursor { width: .4em; height: 1em; }
+    }
+
+    @media (max-width: 400px) {
+      .terminal { border-radius: 0; border-left: none; border-right: none; }
+      body { padding: 0; }
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      #input { font-size: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cursor { animation: none; }
+    }
+  </style>
 </head>
-<style type="text/css">
-body{
-  background-color: #171421;
-  color:#FFFFFF;
-  zoom: 150%;
-}
-.text {
-  font-size:15px;
-  font-family:helvetica;
-  font-weight:bold;
-  color:#5EBDAB;
-  text-transform:uppercase;
-}
-.par { 
-  animation-name: parpadeo;
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
- 
-  -webkit-animation-name:parpadeo;
-  -webkit-animation-duration: 1s;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation-iteration-count: infinite;
-}
-
-@-moz-keyframes parpadeo{  
-  0% { opacity: 1.0; }
-  50% { opacity: 0.0; }
-  100% { opacity: 1.0; }
-}
- 
-@-webkit-keyframes parpadeo {  
-  0% { opacity: 1.0; }
-  50% { opacity: 0.0; }
-  100% { opacity: 1.0; }
-}
- 
-@keyframes parpadeo {  
-  0% { opacity: 1.0; }
-  50% { opacity: 0.0; }
-  100% { opacity: 1.0; }
-}
-input[type="text"]{
-  background: transparent;
-  border: none;
-  font-size:12px;
-  font-family:helvetica;
-  font-weight:bold;
-  color:#5EBDAB;
-  outline: none;
-}
-/* COLORS */
-.d{
-  color: #367BF0;
-}
-.r{
-  color: #5EBDAB;
-}
-.w{
-  color: #FF8A18;
-}
-.x{
-  color: #D41919;
-}
-.line{
-  color: #808080;
-}
-.info{
-  color: #198388;
-}
-.user{
-  color: #D0CFCC;
-}
-.dir{
-  color: #5292FF;
-  font-weight: bold;
-}
-
-.header1{
-  color: #5EBDAB;
-}
-.header2{
-  color: #367BF0;
-}
-.oculto{
-  visibility: hidden;
-  color: #D0CFCC;
-}
-@media (max-width: 1100px) {
- html,body{
-  zoom: 90%;
-  }
-  input[type="text"]{
-  background: transparent;
-  border: none;
-  font-size: 30px;
-  font-family:helvetica;
-  font-weight:bold;
-  color:#5EBDAB;
-  outline: none;
-}
-}
-</style>
-<script>
-function pulsar() {
-  var x = document.getElementById("barra");
-  if (x.style.display === "block") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
-</script>
 <body>
-<code>
-<!-- DIRECTORIOS -->
-<h3 class="header1">┌──(<font class="header2">b3nj1㉿www</font>)-[~]
-</br>
-└─$ ls <font color="#962AC3">-l</font></h3>
-total 0<br>
-<font class="d">d</font><font class="r">r</font><font class="w">w</font><font class="x">x</font><font class="r">r</font></font><font class="line">-</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font> <font class="info">1</font> <font class="user">b3nj1</font> <font class="user">b3nj1</font> &nbsp;<font class="info">2048 Jul 21 &nbsp;2021</font> <a class="dir" href="https://b3nj1-1.github.io/blog/">Blog/</a><br>
- 
-<font class="d">d</font><font class="r">r</font><font class="w">w</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font> <font class="info">1</font> <font class="user">b3nj1</font> <font class="user">b3nj1</font> &nbsp;<font class="info">2048 Dec 29 &nbsp;2020</font> <a class="dir" href="https://github.com/b3nj1-1">Github/</a><br>
-  
-<font class="d">d</font><font class="r">r</font><font class="w">w</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font> <font class="info">1</font> <font class="user">b3nj1</font> <font class="user">b3nj1</font> &nbsp;<font class="info">2048 Apr 1 &nbsp;2020</font> <a class="dir" href="https://twitter.com/b3nj1_1">Twitter/</a><br>
- 
-<font class="d">d</font><font class="r">r</font><font class="w">w</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font> <font class="info">1</font> <font class="user">b3nj1</font> <font class="user">b3nj1</font> &nbsp;<font class="info">2048 Jan 1 &nbsp;2020</font> <a class="dir" href="https://app.hackthebox.eu/profile/257310">HacktheBox/</a><br>
+  <div class="terminal" role="application" aria-label="Terminal emulator">
+    <div id="output"></div>
+    <div class="prompt-line">
+      <span class="prompt-prefix">└─$</span>
+      <input type="text" id="input" autofocus spellcheck="false" autocomplete="off" aria-label="Terminal input">
+      <span class="cursor" aria-hidden="true"></span>
+    </div>
+  </div>
 
-<font class="d">d</font><font class="r">r</font><font class="w">w</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font><font class="r">r</font><font class="line">-</font><font class="x">x</font> <font class="info">1</font> <font class="user">b3nj1</font> <font class="user">b3nj1</font> &nbsp;<font class="info">2048 Jan 1 &nbsp;2026</font> <a class="dir" href="https://www.linkedin.com/in/elian-castro/">Linkedin/</a><br>
- 
- 
-<!-- INPUT -->
-<h3 class="header1">┌──(<font class="header2">b3nj1㉿www</font>)-[~]</br>
-└─$<span class="par text"><strong id="barra">|</span><input type="text" id="shell" onclick="pulsar()" spellcheck="false"/></strong></h3>
+  <script>
+    (() => {
+      'use strict';
 
-<!-- RESPUESTA -->
-<div id="response" class="oculto">
-<h4>This is my blog oriented on cybersecurity</h4>
-</code>
-<script>
-  document.getElementById("shell").onkeypress = function(e){
-    if (!e) e = window.event;
-    if (e.keyCode === 13) {
-  document.getElementById("response").style.visibility = "visible";
-      return false;
-  }};
-</script>
+      const $ = (s, ctx = document) => ctx.querySelector(s);
+      const output = $('#output');
+      const input = $('#input');
+      const cursor = $('.cursor');
+
+      // ---------- ls output template ----------
+      const PERMS = '<span class="c-d">d</span><span class="c-r">r</span><span class="c-w">w</span><span class="c-x">x</span><span class="c-r">r</span><span class="c-line">-</span><span class="c-x">x</span><span class="c-r">r</span><span class="c-line">-</span><span class="c-x">x</span>';
+
+      const DIRS = [
+        { name: 'Blog',       url: 'https://b3nj1-1.github.io/blog/',                                          date: 'Jul 21  2021' },
+        { name: 'Github',     url: 'https://github.com/b3nj1-1',                                                date: 'Dec 29  2020' },
+        { name: 'Twitter',    url: 'https://twitter.com/b3nj1_1',                                               date: 'Apr 1   2020' },
+        { name: 'HacktheBox', url: 'https://app.hackthebox.eu/profile/257310',                                   date: 'Jan 1   2020' },
+        { name: 'Linkedin',   url: 'https://www.linkedin.com/in/elian-castro/',                                 date: 'Jan 1   2026' },
+      ];
+
+      // ---------- command registry ----------
+      const cmds = {};
+
+      function reg(name, fn, desc) {
+        cmds[name] = { run: fn, desc };
+      }
+
+      reg('help', () => {
+        const lines = ['Available commands:', ''];
+        for (const [name, cmd] of Object.entries(cmds)) {
+          if (cmd.desc) lines.push(`  ${name.padEnd(14)} ${cmd.desc}`);
+        }
+        return lines.join('\n');
+      }, 'Show this help');
+
+      reg('whoami', () => 'b3nj1');
+      reg('date', () => new Date().toLocaleString('en-US', {
+        weekday: 'short', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        timeZoneName: 'short', year: 'numeric'
+      }));
+
+      reg('clear', () => { output.innerHTML = ''; return null; }, 'Clear the terminal');
+
+      reg('ls', () => {
+        const lines = ['total 0'];
+        for (const d of DIRS) {
+          lines.push(`${PERMS} <span class="c-info">1</span> <span class="c-user">b3nj1</span> <span class="c-user">b3nj1</span> <span class="c-info">2048 ${d.date}</span> <a class="c-dir" href="${d.url}" target="_blank" rel="noopener noreferrer">${d.name}/</a>`);
+        }
+        return lines.join('<br>');
+      }, 'List directory contents');
+
+      reg('neofetch', () => {
+        return [
+          `<span class="color-green">b3nj1@www</span>`,
+          `<span class="color-green">-----------</span>`,
+          `<span class="color-blue">OS:</span> Arch Linux x86_64`,
+          `<span class="color-blue">Host:</span> personal-website`,
+          `<span class="color-blue">Kernel:</span> 6.7.2-zen1-1-zen`,
+          `<span class="color-blue">Shell:</span> zsh 5.9`,
+          `<span class="color-blue">Terminal:</span> custom-terminal`,
+          `<span class="color-blue">Uptime:</span> way too long`,
+          `<span class="color-blue">Packages:</span> too many to count`,
+          `<span class="color-blue">Memory:</span> all of it / all of it`,
+        ].join('\n');
+      }, 'Display system info (fake)');
+
+      reg('sudo', (args) => {
+        if (!args || !args.trim()) return 'usage: sudo &lt;command&gt;';
+        const sub = args.trim().split(/\s+/)[0];
+        if (sub === 'rm') {
+          return [
+            `<span class="color-red"># --=== YOU HAVE NO POWER HERE ===--</span>`,
+            `<span class="color-red">Nice try. This is a static site, cowboy.</span>`,
+          ].join('\n');
+        }
+        if (sub === 'apt' || sub === 'pacman') {
+          return `<span class="color-orange">[sudo] password for b3nj1:</span>\n<span class="color-red">Sorry, try again.</span>`;
+        }
+        return `b3nj1 is not in the sudoers file. This incident will be reported.`;
+      }, 'Execute a command as superuser');
+
+      reg('banner', () => {
+        return [
+          `<span class="color-green">██████╗ ██████╗ ███╗   ██╗ ██╗ ██╗</span>`,
+          `<span class="color-green">██╔══██╗╚════██╗████╗  ██║ ██║ ██║</span>`,
+          `<span class="color-green">██████╔╝ █████╔╝██╔██╗ ██║ ██║ ██║</span>`,
+          `<span class="color-green">██╔══██╗ ╚═══██╗██║╚██╗██║ ╚═╝ ╚═╝</span>`,
+          `<span class="color-green">██████╔╝██████╔╝██║ ╚████║ ██╗ ██╗</span>`,
+          `<span class="color-green">╚═════╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═╝ ╚═╝</span>`,
+          ``,
+          `<span class="color-cyan">     cybersecurity & software engineering</span>`,
+        ].join('\n');
+      });
+
+      const LINK_CMDS = {
+        blog:       { url: 'https://b3nj1-1.github.io/blog/',                                        label: 'Visit the blog',                  msg: 'This is my blog oriented on cybersecurity' },
+        github:     { url: 'https://github.com/b3nj1-1',                                              label: 'Visit GitHub profile',             msg: 'Open-source projects and contributions' },
+        twitter:    { url: 'https://twitter.com/b3nj1_1',                                             label: 'Visit Twitter / X',                msg: 'Random thoughts and updates' },
+        hackthebox: { url: 'https://app.hackthebox.eu/profile/257310',                                label: 'Visit Hack The Box',               msg: 'Hack The Box profile & writeups' },
+        linkedin:   { url: 'https://www.linkedin.com/in/elian-castro/',                               label: 'Visit LinkedIn',                   msg: 'Professional profile' },
+      };
+
+      for (const [name, info] of Object.entries(LINK_CMDS)) {
+        const fn = () => { window.open(info.url, '_blank', 'noopener,noreferrer'); return info.msg; };
+        reg(name, fn, info.label);
+      }
+
+      const aliases = {
+        gh: 'github', 'x': 'twitter', htb: 'hackthebox', in: 'linkedin',
+      };
+
+      reg('email', () => 'Contact form coming soon. For now, try GitHub or LinkedIn.', 'Contact info');
+      reg('repo', () => 'https://github.com/b3nj1-1/b3nj1-1.github.io', 'Source code of this site');
+
+      reg('pwd', () => '/home/b3nj1');
+      reg('cd', (args) => {
+        const target = args?.trim();
+        if (!target || target === '~') return '<span class="color-gray">Already in home directory</span>';
+        if (target === '/' || target === '..') return '<span class="color-orange">You are already at the root of b3nj1.net</span>';
+        const dir = DIRS.find(d => d.name.toLowerCase() === target.toLowerCase().replace(/\/$/, ''));
+        if (dir) {
+          window.open(dir.url, '_blank', 'noopener,noreferrer');
+          return `<span class="color-cyan">Navigating to ${dir.name}/ ...</span>`;
+        }
+        return `<span class="color-red">cd: no such directory: ${escapeHtml(target)}</span>`;
+      }, 'Change directory / open a link');
+      reg('echo', (args) => args || '', 'Print arguments');
+      reg('uptime', () => {
+        const up = Math.floor(performance.now() / 1000);
+        const h = Math.floor(up / 3600);
+        const m = Math.floor((up % 3600) / 60);
+        const s = up % 60;
+        const time = `${String(h).padStart(2)}:${String(m).padStart(2)}`;
+        return ` ${time}  up ${h}:${String(m).padStart(2)}:${String(s).padStart(2)},  ${h} user${h !== 1 ? 's' : ''},  load average: 0.00 0.01 0.05`;
+      }, 'Show system uptime (fake)');
+
+      // ---------- output rendering ----------
+      function write(html) {
+        if (html === null) return;
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        output.append(div);
+      }
+
+      function writeLine(html) {
+        write(html + '<br>');
+      }
+
+      function scrollDown() {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      }
+
+      // ---------- prompt ----------
+      function escapeHtml(str) {
+        const d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
+      }
+
+      function prompt(text = '') {
+        const safe = escapeHtml(text);
+        const ps1 = '<span class="c-header1">┌──(<span class="c-header2">b3nj1㉿www</span>)-[~]</span><br><span class="prompt-prefix">└─$</span> <span class="color-gray">' + safe + '</span>';
+        writeLine(ps1);
+        scrollDown();
+      }
+
+      // ---------- typewriter ----------
+      function typeText(text, speed = 18) {
+        return new Promise(resolve => {
+          const target = $('#type-target');
+          if (!target) { resolve(); return; }
+          let i = 0;
+          const iv = setInterval(() => {
+            target.textContent += text[i++];
+            scrollDown();
+            if (i >= text.length) { clearInterval(iv); resolve(); }
+          }, speed);
+        });
+      }
+
+      function delay(ms) {
+        return new Promise(r => setTimeout(r, ms));
+      }
+
+      // ---------- startup ----------
+      async function boot() {
+        input.disabled = true;
+        cursor.classList.add('static');
+
+        const header = `<span class="c-header1">┌──(<span class="c-header2">b3nj1㉿www</span>)-[~]</span>`;
+        writeLine(header);
+        write('<span class="prompt-prefix">└─$</span> <span class="color-purple">ls -l</span><br>');
+
+        // typewrite "total 0" on its own line
+        writeLine('<span id="type-target"></span>');
+        await typeText('total 0', 16);
+
+        // show directory lines with a delay
+        const lsOutput = cmds.ls.run();
+        const lines = lsOutput.split('<br>');
+        for (let i = 1; i < lines.length; i++) {
+          await delay(30);
+          writeLine(lines[i]);
+        }
+
+        cursor.classList.remove('static');
+        input.disabled = false;
+        input.focus();
+        scrollDown();
+      }
+
+      // ---------- command dispatch ----------
+      function evaluate(cmdLine) {
+        const trimmed = cmdLine.trim();
+        if (!trimmed) return prompt();
+
+        const parts = trimmed.split(/\s+/);
+        const cmd = parts[0].toLowerCase();
+        const args = parts.slice(1).join(' ');
+
+        prompt(trimmed);
+
+        // resolve aliases
+        const resolved = aliases[cmd] || cmd;
+
+        if (cmds[resolved]) {
+          let result = cmds[resolved].run(args);
+          if (result) {
+            result = String(result).replace(/\n/g, '<br>');
+            writeLine(result);
+          }
+        } else {
+          writeLine(`<span class="color-red">zsh: command not found: ${cmd}</span>`);
+        }
+
+        scrollDown();
+      }
+
+      // ---------- input handling ----------
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const val = input.value;
+          input.value = '';
+          evaluate(val);
+        }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+          e.preventDefault();
+          output.innerHTML = '';
+        }
+      });
+
+      // keep cursor visible when input blurred (desktop only)
+      const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      if (!isMobile) {
+        input.addEventListener('blur', () => setTimeout(() => input.focus(), 10));
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('a') && e.target !== input) input.focus();
+        });
+      }
+      input.addEventListener('focus', () => cursor.classList.remove('static'));
+      input.addEventListener('blur', () => cursor.classList.add('static'));
+
+      // ---------- start ----------
+      boot();
+    })();
+  </script>
 </body>
 </html>
